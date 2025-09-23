@@ -3,9 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>StoryCraft AI - Your AI Storytelling Companion</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-book-open"></i>
+            </div>
+            <h1>Novelify: Where Imagination Meets AI</h1>
+            <p class="tagline">Transform your ideas into reality</p>
+        </header>
+
+        <div class="app-container">
+            <div class="controls-panel">
+                <div class="connection-status" id="connection-status">
+                    <i class="fas fa-circle"></i> Checking server connection...
+                </div>
+                
+                <div class="form-group">
+                    <h2 class="section-title"><i class="fas fa-cog"></i> Story Settings</h2>
+                    
+                    <label for="genre">Genre</label>
+                    <select id="genre">
+                        <option value="fantasy">Fantasy</option>
+                        <option value="science fiction">Science Fiction</option>
+                        <option value="mystery">Mystery</option>
+                        <option value="romance">Romance</option>
+                        <option value="adventure">Adventure</option>
+                        <option value="horror">Horror</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="tone">Tone</label>
+                    <select id="tone">
+                        <option value="epic">Epic</option>
+                        <option value="humorous">Humorous</option>
+                        <option value="dark">Dark</option>
+                        <option value="lighthearted">Lighthearted</option>
+                        <option value="suspenseful">Suspenseful</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="prompt">Your Story Idea</label>
+                    <textarea id="prompt" placeholder="Describe your story idea or starting point...">A young wizard discovers a hidden power within themselves on their 16th birthday...</textarea>
+                </div>
+                
+                <button id="generate-btn" class="btn">
+                    <i class="fas fa-magic"></i> Generate Story Beginning
+                </button>
+
+                <button id="test-btn" class="btn btn-test">
+                    <i class="fas fa-plug"></i> Test Connection
+                </button>
+                
+                <div class="form-group" style="margin-top: 30px;">
+                    <h2 class="section-title"><i class="fas fa-user"></i> Character Creator</h2>
+                    
+                    <label for="character-role">Character Role</label>
+                    <input type="text" id="character-role" placeholder="e.g., brave knight, cunning thief">
+                    
+                    <button id="create-character-btn" class="btn btn-secondary" style="margin-top: 15px;">
+                        <i class="fas fa-plus"></i> Create Character
+                    </button>
+                </div>
+            </div>
+            
+            <div class="story-output">
+                <div class="story-header">
+                    <h2 class="story-title">Your Story</h2>
+                </div>
+                
+                <div class="story-content" id="story-content">
+                    <div class="message ai-message">
+                        <div class="message-header">
+                            <span>Novelify AI</span>
+                            <span>Just now</span>
+                        </div>
+                        <p>Welcome to Novelify! I'm here to help you create amazing stories. Start by entering your story idea and selecting your preferred genre and tone, then click "Generate Story Beginning" to get started!</p>
+                    </div>
+                </div>
+                
+                <div class="typing-indicator" id="typing-indicator">
+                    <i class="fas fa-ellipsis-h"></i> StoryCraft AI is writing...
+                </div>
+                
+                <div class="action-buttons">
+                    <button id="continue-btn" class="btn">
+                        <i class="fas fa-forward"></i> Continue Story
+                    </button>
+                    <button id="rewrite-btn" class="btn btn-secondary">
+                        <i class="fas fa-edit"></i> Rewrite Last Part
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Powered by Gemini AI API</p>
+            <p>Project submitted by Ashley Gellado, Atheena Ashley Pineda, Mary Shifra Lopez, Zephanaiah Belmis, Sophia Mendoza</p>
+        </footer>
+    </div>
+
+ <script src="script.js"></script>
+
+
 </body>
+
 </html>
