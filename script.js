@@ -1,7 +1,6 @@
 // API Configuration
-const API_URL = 'http://localhost:3000/ai';
-const TEST_URL = 'http://localhost:3000/test';
-
+const API_URL = '/ai';
+const TEST_URL = '/test';
 // Application State
 let storyHistory = [];
 let isConnected = false;
