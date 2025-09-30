@@ -1,9 +1,11 @@
 // API Configuration
 const API_URL = '/ai';
 const TEST_URL = '/test';
-// Application State
+
+// Application State (FIX: Added createdCharacter state)
 let storyHistory = [];
 let isConnected = false;
+let createdCharacter = ''; // NEW: Stores the full AI character description
 
 // DOM Elements
 const generateBtn = document.getElementById('generate-btn');
@@ -88,19 +90,20 @@ function addMessage(sender, text, isUser = false, isError = false) {
     const now = new Date();
     const timeString = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
     
+    // Use innerHTML for formatting, but escape text content for safety if needed
     messageDiv.innerHTML = `
         <div class="message-header">
             <span>${sender}</span>
             <span>${timeString}</span>
         </div>
-        <p>${text}</p>
+        <p>${text.replace(/\n/g, '<br>')}</p>
     `;
     
     storyContent.appendChild(messageDiv);
     storyContent.scrollTop = storyContent.scrollHeight;
     
-    // Store in history (unless it's an error message)
-    if (!isError) {
+    // Store in history (unless it's an error message or a generated character)
+    if (!isError && sender === 'StoryCraft AI') { // Only track AI story parts
         storyHistory.push({
             sender,
             text,
@@ -126,7 +129,8 @@ async function callGeminiAPI(prompt) {
         });
         
         if (!response.ok) {
-            throw new Error(`Server error: ${response.status}`);
+            const errorData = await response.json();
+            throw new Error(`Server error: ${response.status} - ${errorData.details || 'Unknown API issue'}`);
         }
         
         const data = await response.json();
@@ -137,11 +141,18 @@ async function callGeminiAPI(prompt) {
     }
 }
 
-// Build a context-aware prompt
+// Build a context-aware prompt (FIX: Added character context)
 function buildPrompt(action, userInput, context = '') {
     const genre = document.getElementById('genre').value;
     const tone = document.getElementById('tone').value;
     
+    let characterContext = '';
+    //Include character context for story actions
+    if (createdCharacter && (action === 'continue' || action === 'rewrite')) {
+        // We prepend this instruction to ensure the AI uses the character
+        characterContext = `\n\n**IMPORTANT CHARACTER CONTEXT: The detailed character is:**\n${createdCharacter}\n\n**Weave this character naturally into the next part of the story.**\n\n`;
+    }
+
     let prompt = '';
     
     switch(action) {
@@ -150,11 +161,11 @@ function buildPrompt(action, userInput, context = '') {
             break;
             
         case 'continue':
-            prompt = `Continue this ${genre} story with a ${tone} tone. Here's the story so far: "${context}". Continue the narrative naturally, developing the plot and characters.`;
+            prompt = `${characterContext}Continue this ${genre} story with a ${tone} tone. Here's the story so far: "${context}". Continue the narrative naturally, developing the plot and characters.`;
             break;
             
         case 'rewrite':
-            prompt = `Rewrite the last part of this ${genre} story with a ${tone} tone to make it more engaging. The story so far: "${context}". Focus on improving the most recent section while maintaining consistency.`;
+            prompt = `${characterContext}Rewrite the last part of this ${genre} story with a ${tone} tone to make it more engaging. The story so far: "${context}". Focus on improving the most recent section while maintaining consistency.`;
             break;
             
         case 'character':
@@ -172,11 +183,11 @@ function getStoryContext() {
     // Get the last few AI messages for context
     const recentMessages = storyHistory
         .filter(msg => !msg.isUser)
-        .slice(-3)
+        .slice(-3) // Use the last 3 AI-generated chunks
         .map(msg => msg.text)
         .join(' ');
         
-    return recentMessages.substring(0, 1000); // Limit context length
+    return recentMessages.substring(0, 1000); // Limit context length to save tokens
 }
 
 // Generate story beginning
@@ -187,6 +198,11 @@ async function generateStoryBeginning() {
         alert('Please enter a story idea to get started!');
         return;
     }
+    
+    // Clear old history and character when starting a new story
+    storyHistory = []; 
+    createdCharacter = '';
+    storyContent.innerHTML = ''; // Clear display
     
     showTypingIndicator();
     addMessage('You', userPrompt, true);
@@ -239,6 +255,7 @@ async function rewriteLastPart() {
         const fullPrompt = buildPrompt('rewrite', '', context);
         const aiResponse = await callGeminiAPI(fullPrompt);
         addMessage('StoryCraft AI', `(Rewritten) ${aiResponse}`);
+        
     } catch (error) {
         addMessage('System', `Error: ${error.message}`, false, true);
     }
@@ -261,7 +278,11 @@ async function createCharacter() {
     try {
         const fullPrompt = buildPrompt('character', roleInput);
         const aiResponse = await callGeminiAPI(fullPrompt);
+        
+        //Store the character for later use
+        createdCharacter = aiResponse; 
         addMessage('Novelify', `Character created:\n${aiResponse}`);
+        
     } catch (error) {
         addMessage('System', `Error: ${error.message}`, false, true);
     }
