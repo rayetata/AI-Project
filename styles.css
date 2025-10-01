@@ -142,27 +142,21 @@ textarea {
     transform: translateY(-2px);
 }
 
-/* ✅ Make .btn-secondary look the same as .btn */
+/* Make btn-secondary look the same as btn */
 .btn-secondary {
-    background: var(--primary);
+    background-color: var(--primary); 
     color: white;
     border: none;
+    cursor: pointer;
     padding: 12px 20px;
     border-radius: 10px;
     font-size: 1rem;
     font-weight: 600;
-    cursor: pointer;
     transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    width: 100%;
 }
 
 .btn-secondary:hover {
-    background: var(--primary-light);
-    transform: translateY(-2px);
+    background-color: var(--primary-light);
 }
 
 .btn:disabled {
