@@ -2,10 +2,10 @@
 const API_URL = '/ai';
 const TEST_URL = '/test';
 
-// Application State (FIX: Added createdCharacter state)
+// Application State
 let storyHistory = [];
 let isConnected = false;
-let createdCharacter = ''; // NEW: Stores the full AI character description
+let createdCharacter = '';
 
 // DOM Elements
 const generateBtn = document.getElementById('generate-btn');
@@ -202,7 +202,7 @@ async function generateStoryBeginning() {
     // Clear old history and character when starting a new story
     storyHistory = []; 
     createdCharacter = '';
-    storyContent.innerHTML = ''; // Clear display
+    storyContent.innerHTML = ''; 
     
     showTypingIndicator();
     addMessage('You', userPrompt, true);
