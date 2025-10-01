@@ -8,15 +8,15 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
 
-// ✅ 1. Serve static files from "public" folder
+// Serve static files from the "public" directory
 app.use(express.static(path.join(__dirname, "public")));
 
-// ✅ 2. Serve your main HTML file from "public"
+// Serve the main HTML file
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "storyGenerator.html"));
 });
 
-// ✅ 3. Test route (optional)
+// Test route (optional)
 app.get("/test", (req, res) => {
   res.json({ message: "Server is running" });
 });
@@ -25,7 +25,7 @@ app.get("/test", (req, res) => {
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
-// ✅ 4. AI endpoint
+// AI endpoint
 app.post("/ai", async (req, res) => {
   const { prompt } = req.body;
 
