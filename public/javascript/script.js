@@ -141,7 +141,7 @@ async function callGeminiAPI(prompt) {
     }
 }
 
-// Build a context-aware prompt (FIX: Added character context)
+// Build a context-aware prompt 
 function buildPrompt(action, userInput, context = '') {
     const genre = document.getElementById('genre').value;
     const tone = document.getElementById('tone').value;
